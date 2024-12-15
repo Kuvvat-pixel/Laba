@@ -1,81 +1,54 @@
 #include <iostream>
-#include <iomanip>
-#include <limits>  
-using namespace std;
+#include <vector> 
+#include <algorithm> 
 
-void showMenu() {
-    cout << "\n=== Контекстное меню ===\n";
-    cout << "Задание: Вычисление суммы (ai - bi)^30 для i от 1 до 30\n";
-    cout << "ai = i для нечетных i, i/2 для четных i\n";
-    cout << "bi = i/2 для нечетных i, i/3 для четных i\n";
-    cout << "Автор: Иванов Иван\n";
-    cout << "Вариант: 1\n";
-    cout << "1. Выполнить расчет\n";
-    cout << "2. Показать меню\n";
-    cout << "3. Выход\n";
-    cout << "4. Я согласен на 4\n";// Новый пункт меню
-}
-
-double calculateSum() {
-    double sum = 0;
-    for (int i = 1; i <= 30; i++) {
-        double ai, bi;
-        if (i % 2 != 0) { // Нечетное
-            ai = i;
-            bi = i / 2.0;
-        } else { // Четное
-            ai = i / 2.0;
-            bi = i / 3.0;
-        }
-        sum += (ai - bi);
+void printArray(const std::vector<int>& arr) {
+    for (int num : arr) {
+        std::cout << num << " ";
     }
-    return sum;
+    std::cout << std::endl;
 }
 
-void clearInput() {
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+void shiftRight(std::vector<int>& arr, int n) {
+    int size = arr.size();
+
+    // Если массив пуст или сдвиг равен 0, ничего делать не нужно
+    if (size == 0 || n % size == 0) {
+        return;
+    }
+
+    // Нормализуем сдвиг (если n больше длины массива)
+    n = n % size;
+
+    // Используем rotate для циклического сдвига
+    std::rotate(arr.rbegin(), arr.rbegin() + n, arr.rend());
 }
 
 int main() {
-    int choice = 0;
+    // Инициализируем массив
+    std::vector<int> arr = {1, 2, 3, 4, 5, 6, 7};
 
-    do {
-        showMenu();
-        cout << "\nВыберите действие: ";
-        cin >> choice;
+    // Выводим исходный массив
+    std::cout << "Исходный массив: ";
+    printArray(arr);
 
-        // Проверка на ошибки ввода
-        if (cin.fail()) {
-            cout << "Ошибка ввода. Пожалуйста, введите число.\n";
-            clearInput(); // Очищаем ввод
-            continue; // Возвращаемся к началу цикла
-        }
+    // Вводим значение N для сдвига
+    int n;
+    std::cout << "Введите количество позиций для сдвига вправо: ";
+    std::cin >> n;
 
-        switch (choice) {
-            case 1:
-                cout << fixed << setprecision(2);
-                cout << "Результат вычисления: " << calculateSum() << "\n";
-                cout << "Нажмите Enter для продолжения...";
-                cin.ignore(); // Игнорируем оставшийся символ новой строки
-                cin.get(); // Ждем нажатия клавиши
-                break;
-            case 2:
-                showMenu();
-                break;
-            case 3:
-                cout << "Выход из программы.\n";
-                break;
-            case 4:
-                cout << "Я согласен на 4\n"; // Вывод сообщения
-                cout << "Нажатия Enter для продолжения...";
-                cin.ignore();
-                cin.get(); 
-                break;
-            default:
-                cout << "Некорректный выбор. Пожалуйста, выберите снова.\n";
-                break;
-        }
-    } while (choice != 3);
-return 0;
+    // Сдвигаем массив вправо на N позиций
+    shiftRight(arr, n);
+
+    // Выводим результат
+    std::cout << "Массив после сдвига: ";
+    printArray(arr);
+
+    return 0;
 }
+
+
+
+
+
+
